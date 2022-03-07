@@ -5,19 +5,11 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "AP_RawDataCovidCases",
-						"type": "DatasetReference"
-					},
 					"name": "SRCRawDataCSV"
 				}
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "AP_CleanDataCovidCases",
-						"type": "DatasetReference"
-					},
 					"name": "DSTCleanDataCSV"
 				}
 			],
@@ -48,8 +40,7 @@
 				"          AdminRegion2 as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> SRCRawDataCSV",
+				"     validateSchema: false) ~> SRCRawDataCSV",
 				"AddDateAndCleanText select(mapColumn(",
 				"          RowID = ID,",
 				"          CasesConfirmed = Confirmed,",
@@ -75,29 +66,11 @@
 				"          AdminRegion2 = replace(AdminRegion2, '\"', '')) ~> AddDateAndCleanText",
 				"RenameColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          RowID as string,",
-				"          CasesConfirmed as string,",
-				"          CasesConfirmedChange as string,",
-				"          Deaths as string,",
-				"          DeathsChange as string,",
-				"          CasesRecovered as string,",
-				"          CasesRecoveredChange as string,",
-				"          Latitude as string,",
-				"          Longitude as string,",
-				"          ISO2 as string,",
-				"          ISO3 as string,",
-				"          Country as string,",
-				"          Region1 as string,",
-				"          Region2 as string,",
-				"          Date as string",
-				"     ),",
 				"     filePattern:'CleanBingCovidData',",
-				"     umask: 0022,",
-				"     preCommands: [],",
-				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> DSTCleanDataCSV"
+				"     skipDuplicateMapOutputs: true,",
+				"     preCommands: [],",
+				"     postCommands: []) ~> DSTCleanDataCSV"
 			]
 		}
 	}
