@@ -1,0 +1,12 @@
+{
+	"name": "GitHubURL",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "https://raw.githubusercontent.com/ADCdevelop/Azure/Data/country_vaccinations_by_manufacturer.csv",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
