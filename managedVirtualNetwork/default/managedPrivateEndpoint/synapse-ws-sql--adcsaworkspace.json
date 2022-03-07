@@ -1,0 +1,10 @@
+{
+	"name": "synapse-ws-sql--adcsaworkspace",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/a4227661-d5b9-4b28-b98d-8dd35e51b4d3/resourceGroups/ADCTeam/providers/Microsoft.Synapse/workspaces/adcsaworkspace",
+		"groupId": "sql",
+		"fqdns": [
+			"adcsaworkspace.5ce23105-13a5-4af8-9201-f112b76518dd.sql.azuresynapse.net"
+		]
+	}
+}
