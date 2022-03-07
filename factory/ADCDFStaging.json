@@ -1,0 +1,9 @@
+{
+	"name": "ADCDFStaging",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "5ba831a7-e98f-4d87-abd7-85a541ac18b1",
+		"tenantId": "11c6f419-6576-43f5-969b-73272724de44"
+	}
+}
