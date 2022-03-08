@@ -1,0 +1,17 @@
+{
+	"name": "SQL_CovidCases",
+	"properties": {
+		"content": {
+			"query": "\n/* Add a schema for all staging tables*/\nCREATE SCHEMA [staging]\n\n/* Create a staging table to keep cleaned file results*/\nCREATE TABLE [staging].[Covid_Data]\n(\n    id int NOT NULL\n    ,Date_updated datetime not NULL\n    ,CasesConfirmed int\n    ,ConfirmedChange INT\n    ,Deaths INT\n    ,DeathsChange INT \n\t,Recovered INT \n\t,RecoveredChange INT \n\t,Latitude [nvarchar](50) \n\t,Longitude [nvarchar](50) \n\t,ISO2 [nvarchar](5) \n\t,ISO3 [nvarchar](5) \n\t,Country [nvarchar](50) \n\t,Region1 [nvarchar](50) \n\t,Region2 [nvarchar](50) \n)\nWITH\n(\n    DISTRIBUTION = HASH (id),\n    CLUSTERED COLUMNSTORE INDEX\n)\nGO\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "ASA_DWH",
+				"poolName": "ASA_DWH"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

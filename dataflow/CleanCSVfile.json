@@ -1,0 +1,108 @@
+{
+	"name": "CleanCSVfile",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "RawDataCovidCases",
+						"type": "DatasetReference"
+					},
+					"name": "SRCRawDataCSV"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Covid_data",
+						"type": "DatasetReference"
+					},
+					"name": "STGCOVIDCases"
+				}
+			],
+			"transformations": [
+				{
+					"name": "ConvertDate"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as string,",
+				"          Updated as string,",
+				"          Confirmed as string,",
+				"          ConfirmedChange as string,",
+				"          Deaths as string,",
+				"          DeathsChange as string,",
+				"          Recovered as string,",
+				"          RecoveredChange as string,",
+				"          Latitude as string,",
+				"          Longitude as string,",
+				"          ISO2 as string,",
+				"          ISO3 as string,",
+				"          Country_Region as string,",
+				"          AdminRegion1 as string,",
+				"          AdminRegion2 as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     dateFormats: ['MM/dd/yyyy'],",
+				"     preferredIntegralType: 'integer',",
+				"     preferredFractionalType: 'decimal') ~> SRCRawDataCSV",
+				"SRCRawDataCSV derive(Date = toDate(Updated, 'MM/dd/yyyy')\r",
+				",",
+				"          Country_Region = replace(Country_Region, '\"', ''),",
+				"          AdminRegion1 = replace(AdminRegion1, '\"', ''),",
+				"          AdminRegion2 = replace(AdminRegion2, '\"', '')) ~> ConvertDate",
+				"ConvertDate sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id as integer,",
+				"          Date_updated as timestamp,",
+				"          CasesConfirmed as integer,",
+				"          ConfirmedChange as integer,",
+				"          Deaths as integer,",
+				"          DeathsChange as integer,",
+				"          Recovered as integer,",
+				"          RecoveredChange as integer,",
+				"          Latitude as string,",
+				"          Longitude as string,",
+				"          ISO2 as string,",
+				"          ISO3 as string,",
+				"          Country as string,",
+				"          Region1 as string,",
+				"          Region2 as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     staged: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id = ID,",
+				"          Date_updated = Date,",
+				"          CasesConfirmed = Confirmed,",
+				"          ConfirmedChange,",
+				"          Deaths,",
+				"          DeathsChange,",
+				"          Recovered,",
+				"          RecoveredChange,",
+				"          Latitude,",
+				"          Longitude,",
+				"          ISO2,",
+				"          ISO3,",
+				"          Country = Country_Region,",
+				"          Region1 = AdminRegion1,",
+				"          Region2 = AdminRegion2",
+				"     )) ~> STGCOVIDCases"
+			]
+		}
+	}
+}
