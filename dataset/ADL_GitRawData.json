@@ -1,5 +1,5 @@
 {
-	"name": "ADL_RawData",
+	"name": "ADL_GitRawData",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorageLS",

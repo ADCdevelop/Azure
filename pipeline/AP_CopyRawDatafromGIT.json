@@ -70,7 +70,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ADL_RawData",
+						"referenceName": "ADL_GitRawData",
 						"type": "DatasetReference",
 						"parameters": {
 							"filename": {
