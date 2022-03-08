@@ -57,13 +57,12 @@
 							"sink": {
 								"type": "DelimitedTextSink",
 								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings",
-									"copyBehavior": "PreserveHierarchy"
+									"type": "AzureBlobFSWriteSettings"
 								},
 								"formatSettings": {
 									"type": "DelimitedTextWriteSettings",
 									"quoteAllText": true,
-									"fileExtension": ".csv"
+									"fileExtension": ""
 								}
 							},
 							"enableStaging": false,
@@ -102,7 +101,12 @@
 							{
 								"referenceName": "ADL_RawData",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"filename": {
+										"value": "@concat('country_vaccinations_by_manufacturer_',formatDateTime(utcnow(),'yyyyMMdd_HHmm'),'.csv')",
+										"type": "Expression"
+									}
+								}
 							}
 						]
 					}
@@ -128,11 +132,20 @@
 					"referenceName": "AzureDataLakeStorageLS",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"filename": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().filename",
+							"type": "Expression"
+						},
 						"folderPath": "GIT",
 						"fileSystem": "rawdata"
 					},
