@@ -29,8 +29,7 @@
 					"sink": {
 						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings",
-							"copyBehavior": "PreserveHierarchy"
+							"type": "AzureBlobFSWriteSettings"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
@@ -72,7 +71,13 @@
 				"outputs": [
 					{
 						"referenceName": "ADL_RawData",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"filename": {
+								"value": "@concat('country_vaccinations_by_manufacturer_',formatDateTime(utcnow(),'yyyyMMdd_HHmm'),'.csv')",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
