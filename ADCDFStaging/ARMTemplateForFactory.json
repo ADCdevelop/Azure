@@ -99,7 +99,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "ADL_RawData",
+								"referenceName": "ADL_GitRawData",
 								"type": "DatasetReference",
 								"parameters": {
 									"filename": {
@@ -119,12 +119,12 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/GitRaw')]",
-				"[concat(variables('factoryId'), '/datasets/ADL_RawData')]",
+				"[concat(variables('factoryId'), '/datasets/ADL_GitRawData')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageLS')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ADL_RawData')]",
+			"name": "[concat(parameters('factoryName'), '/ADL_GitRawData')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
