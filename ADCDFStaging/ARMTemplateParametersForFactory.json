@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "ADCDFStaging"
+		},
+		"AzureDataLakeStorageLS_accountKey": {
+			"value": ""
+		},
+		"AzureDataLakeStorageLS_properties_typeProperties_url": {
+			"value": "https://adcdlstorage.dfs.core.windows.net"
+		},
+		"GitHubURL_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/ADCdevelop/Azure/Data/country_vaccinations_by_manufacturer.csv"
+		}
+	}
+}
