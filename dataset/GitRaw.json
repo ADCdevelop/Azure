@@ -13,8 +13,26 @@
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
+			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "location",
+				"type": "String"
+			},
+			{
+				"name": "date",
+				"type": "String"
+			},
+			{
+				"name": "vaccine",
+				"type": "String"
+			},
+			{
+				"name": "total_vaccinations",
+				"type": "String"
+			}
+		]
 	}
 }
