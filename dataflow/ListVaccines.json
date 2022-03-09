@@ -1,0 +1,75 @@
+{
+	"name": "ListVaccines",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "country_vaccinations_type",
+						"type": "DatasetReference"
+					},
+					"name": "VaccinationsCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "prices",
+						"type": "DatasetReference"
+					},
+					"name": "PricesVaccinationsCSV"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Results",
+						"type": "DatasetReference"
+					},
+					"name": "VaccineDetails"
+				}
+			],
+			"transformations": [
+				{
+					"name": "DistinctRows"
+				},
+				{
+					"name": "LeftJoin"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          location as string,",
+				"          date as string,",
+				"          vaccine as string,",
+				"          total_vaccinations as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> VaccinationsCSV",
+				"source(output(",
+				"          vaccine as string,",
+				"          us_price as string,",
+				"          eu_price as string,",
+				"          doses_required as string,",
+				"          days_apart as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> PricesVaccinationsCSV",
+				"VaccinationsCSV aggregate(groupBy(vaccine_name = vaccine),",
+				"     RowCount = count(1)) ~> DistinctRows",
+				"DistinctRows, PricesVaccinationsCSV join(vaccine_name == vaccine,",
+				"     joinType:'outer',",
+				"     broadcast: 'auto')~> LeftJoin",
+				"LeftJoin sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> VaccineDetails"
+			]
+		}
+	}
+}

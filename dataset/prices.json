@@ -1,0 +1,44 @@
+{
+	"name": "prices",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "price_vaccines.csv",
+				"fileSystem": "rawdata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "vaccine",
+				"type": "String"
+			},
+			{
+				"name": "us_price",
+				"type": "String"
+			},
+			{
+				"name": "eu_price",
+				"type": "String"
+			},
+			{
+				"name": "doses_required",
+				"type": "String"
+			},
+			{
+				"name": "days_apart",
+				"type": "String"
+			}
+		]
+	}
+}
