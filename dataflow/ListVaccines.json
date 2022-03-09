@@ -34,6 +34,9 @@
 				},
 				{
 					"name": "LeftJoin"
+				},
+				{
+					"name": "SelectColumns"
 				}
 			],
 			"scriptLines": [
@@ -59,10 +62,20 @@
 				"VaccinationsCSV aggregate(groupBy(vaccine_name = vaccine),",
 				"     RowCount = count(1)) ~> DistinctRows",
 				"DistinctRows, PricesVaccinationsCSV join(vaccine_name == vaccine,",
-				"     joinType:'outer',",
+				"     joinType:'left',",
 				"     broadcast: 'auto')~> LeftJoin",
-				"LeftJoin sink(allowSchemaDrift: true,",
+				"LeftJoin select(mapColumn(",
+				"          vaccine_name,",
+				"          us_price,",
+				"          eu_price,",
+				"          doses_required,",
+				"          days_apart",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectColumns",
+				"SelectColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['vaccine_type_details'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
