@@ -28,10 +28,10 @@
 					"name": "SelectCountryandVax"
 				},
 				{
-					"name": "join1"
+					"name": "aggregate1"
 				},
 				{
-					"name": "aggregate1"
+					"name": "exists1"
 				}
 			],
 			"scriptLines": [
@@ -70,11 +70,11 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectCountryandVax",
-				"aggregate1, SelectPopulationOnly join(location == name,",
-				"     joinType:'outer',",
-				"     broadcast: 'auto')~> join1",
 				"SelectCountryandVax aggregate(groupBy(location),",
-				"     date = last(date)) ~> aggregate1"
+				"     date = last(date)) ~> aggregate1",
+				"aggregate1, SelectPopulationOnly exists(location == name,",
+				"     negate:false,",
+				"     broadcast: 'auto')~> exists1"
 			]
 		}
 	}
