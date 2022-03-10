@@ -39,7 +39,7 @@
 					"name": "aggregate1"
 				},
 				{
-					"name": "exists1"
+					"name": "join1"
 				}
 			],
 			"scriptLines": [
@@ -80,10 +80,10 @@
 				"     skipDuplicateMapOutputs: true) ~> SelectCountryandVax",
 				"SelectCountryandVax aggregate(groupBy(location),",
 				"     date = last(date)) ~> aggregate1",
-				"aggregate1, SelectPopulationOnly exists(location == name,",
-				"     negate:false,",
-				"     broadcast: 'auto')~> exists1",
-				"exists1 sink(allowSchemaDrift: true,",
+				"aggregate1, SelectPopulationOnly join(location == name,",
+				"     joinType:'outer',",
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     umask: 0022,",
 				"     preCommands: [],",
