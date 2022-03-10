@@ -19,7 +19,11 @@
 					"name": "PopByCountry"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "Destinations"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SelectPopulationOnly"
@@ -74,7 +78,11 @@
 				"     date = last(date)) ~> aggregate1",
 				"aggregate1, SelectPopulationOnly exists(location == name,",
 				"     negate:false,",
-				"     broadcast: 'auto')~> exists1"
+				"     broadcast: 'auto')~> exists1",
+				"exists1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> Destinations"
 			]
 		}
 	}
