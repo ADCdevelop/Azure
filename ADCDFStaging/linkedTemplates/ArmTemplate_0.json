@@ -137,6 +137,33 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Results')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "queryready"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageLS')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/country_vaccinations_type')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -231,7 +258,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Results')]",
+			"name": "[concat(parameters('factoryName'), '/vaccinations_by_manufacturer')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -244,7 +271,109 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileSystem": "queryready"
+						"fileName": "country_vaccinations_by_manufacturer.csv",
+						"fileSystem": "rawdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "location",
+						"type": "String"
+					},
+					{
+						"name": "date",
+						"type": "String"
+					},
+					{
+						"name": "vaccine",
+						"type": "String"
+					},
+					{
+						"name": "total_vaccinations",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pop_by_country_2021_2022')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "population_by_country_2021_2022.csv",
+						"fileSystem": "rawdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Rank",
+						"type": "String"
+					},
+					{
+						"name": "name",
+						"type": "String"
+					},
+					{
+						"name": "pop2022",
+						"type": "String"
+					},
+					{
+						"name": "pop2021",
+						"type": "String"
+					},
+					{
+						"name": "GrowthRate",
+						"type": "String"
+					},
+					{
+						"name": "area",
+						"type": "String"
+					},
+					{
+						"name": "Density",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/psres')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "psresult"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -452,6 +581,109 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/PS_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "vaccinations_by_manufacturer",
+								"type": "DatasetReference"
+							},
+							"name": "vaccinations"
+						},
+						{
+							"dataset": {
+								"referenceName": "pop_by_country_2021_2022",
+								"type": "DatasetReference"
+							},
+							"name": "PopByCountry"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "psres",
+								"type": "DatasetReference"
+							},
+							"name": "Destinations"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectPopulationOnly"
+						},
+						{
+							"name": "SelectCountryandVax"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "exists1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          location as string,",
+						"          date as string,",
+						"          vaccine as string,",
+						"          total_vaccinations as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> vaccinations",
+						"source(output(",
+						"          Rank as string,",
+						"          name as string,",
+						"          pop2022 as string,",
+						"          pop2021 as string,",
+						"          GrowthRate as string,",
+						"          area as string,",
+						"          Density as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> PopByCountry",
+						"PopByCountry select(mapColumn(",
+						"          name,",
+						"          pop2022,",
+						"          pop2021",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectPopulationOnly",
+						"vaccinations select(mapColumn(",
+						"          location,",
+						"          date,",
+						"          total_vaccinations",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectCountryandVax",
+						"SelectCountryandVax aggregate(groupBy(location),",
+						"     date = last(date)) ~> aggregate1",
+						"aggregate1, SelectPopulationOnly exists(location == name,",
+						"     negate:false,",
+						"     broadcast: 'auto')~> exists1",
+						"exists1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> Destinations"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/vaccinations_by_manufacturer')]",
+				"[concat(variables('factoryId'), '/datasets/pop_by_country_2021_2022')]",
+				"[concat(variables('factoryId'), '/datasets/psres')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AP_Vaccine_Types')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -497,6 +729,54 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/ListVaccines')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PS_move_to_new_csv')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data_flow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "PS_df",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"vaccinations": {},
+									"PopByCountry": {},
+									"Destinations": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/PS_df')]"
 			]
 		}
 	]
