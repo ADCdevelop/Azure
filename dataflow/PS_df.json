@@ -79,7 +79,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectCountryandVax",
 				"SelectCountryandVax aggregate(groupBy(location),",
-				"     date = last(date)) ~> aggregate1",
+				"     total_vaccinations = max(total_vaccinations)) ~> aggregate1",
 				"aggregate1, SelectPopulationOnly join(location == name,",
 				"     joinType:'outer',",
 				"     broadcast: 'auto')~> join1",
@@ -88,8 +88,13 @@
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> Destinations"
+				"     mapColumn(",
+				"          location,",
+				"          total_vaccinations,",
+				"          name,",
+				"          pop2022,",
+				"          pop2021",
+				"     )) ~> Destinations"
 			]
 		}
 	}
