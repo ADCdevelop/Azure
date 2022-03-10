@@ -11,6 +11,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'ASA_DWHpool'"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase1'"
+		},
 		"adcsaworkspace-WorkspaceDefaultSqlServer_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'adcsaworkspace-WorkspaceDefaultSqlServer'"
@@ -25,50 +33,54 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('workspaceName'), '/CleanCOVIDcases')]",
-			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"name": "[concat(parameters('workspaceName'), '/AzureSynapseAnalyticsDimTable')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
-				"activities": [
+				"linkedServiceName": {
+					"referenceName": "ASA_DWHpool",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
 					{
-						"name": "Clean file",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "1.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "CleanCSVfile",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"SRCRawDataCSV": {},
-									"STGCOVIDCases": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
+						"name": "vaccine_key",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "vaccine_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "us_price",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "eu_price",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "doses_required",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "days_apart",
+						"type": "int",
+						"precision": 10
 					}
 				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
+				"typeProperties": {
+					"schema": "dim",
+					"table": "Vaccine"
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/dataflows/CleanCSVfile')]"
+				"[concat(variables('workspaceId'), '/linkedServices/ASA_DWHpool')]"
 			]
 		},
 		{
@@ -252,6 +264,55 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/VaccinesData')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "adcsaworkspace-WorkspaceDefaultStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "vaccine_type_details",
+						"fileSystem": "queryready"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "vaccine_name",
+						"type": "String"
+					},
+					{
+						"name": "us_price",
+						"type": "String"
+					},
+					{
+						"name": "eu_price",
+						"type": "String"
+					},
+					{
+						"name": "doses_required",
+						"type": "String"
+					},
+					{
+						"name": "days_apart",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/adcsaworkspace-WorkspaceDefaultStorage')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/ASA_DWHpool')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -260,6 +321,44 @@
 				"type": "AzureSqlDW",
 				"typeProperties": {
 					"connectionString": "[parameters('ASA_DWHpool_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AzureSqlDatabase1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSqlDatabase1_connectionString')]"
 				},
 				"connectVia": {
 					"referenceName": "AutoResolveIntegrationRuntime",
@@ -340,119 +439,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/CleanCSVfile')]",
-			"type": "Microsoft.Synapse/workspaces/dataflows",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "RawDataCovidCases",
-								"type": "DatasetReference"
-							},
-							"name": "SRCRawDataCSV"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "Covid_data",
-								"type": "DatasetReference"
-							},
-							"name": "STGCOVIDCases"
-						}
-					],
-					"transformations": [
-						{
-							"name": "ConvertDate"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          ID as string,",
-						"          Updated as string,",
-						"          Confirmed as string,",
-						"          ConfirmedChange as string,",
-						"          Deaths as string,",
-						"          DeathsChange as string,",
-						"          Recovered as string,",
-						"          RecoveredChange as string,",
-						"          Latitude as string,",
-						"          Longitude as string,",
-						"          ISO2 as string,",
-						"          ISO3 as string,",
-						"          Country_Region as string,",
-						"          AdminRegion1 as string,",
-						"          AdminRegion2 as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     dateFormats: ['MM/dd/yyyy'],",
-						"     preferredIntegralType: 'integer',",
-						"     preferredFractionalType: 'decimal') ~> SRCRawDataCSV",
-						"SRCRawDataCSV derive(Date = toDate(Updated, 'MM/dd/yyyy'),",
-						"          Country_Region = replace(Country_Region, '\"', ''),",
-						"          AdminRegion1 = replace(AdminRegion1, '\"', ''),",
-						"          AdminRegion2 = replace(AdminRegion2, '\"', '')) ~> ConvertDate",
-						"ConvertDate sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
-						"          id as integer,",
-						"          Date_updated as timestamp,",
-						"          CasesConfirmed as integer,",
-						"          ConfirmedChange as integer,",
-						"          Deaths as integer,",
-						"          DeathsChange as integer,",
-						"          Recovered as integer,",
-						"          RecoveredChange as integer,",
-						"          Latitude as string,",
-						"          Longitude as string,",
-						"          ISO2 as string,",
-						"          ISO3 as string,",
-						"          Country as string,",
-						"          Region1 as string,",
-						"          Region2 as string",
-						"     ),",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     truncate:true,",
-						"     format: 'table',",
-						"     staged: false,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     saveOrder: 1,",
-						"     errorHandlingOption: 'stopOnFirstError',",
-						"     mapColumn(",
-						"          id = ID,",
-						"          Date_updated = Date,",
-						"          CasesConfirmed = Confirmed,",
-						"          ConfirmedChange,",
-						"          Deaths,",
-						"          DeathsChange,",
-						"          Recovered,",
-						"          RecoveredChange,",
-						"          Latitude,",
-						"          Longitude,",
-						"          ISO2,",
-						"          ISO3,",
-						"          Country = Country_Region,",
-						"          Region1 = AdminRegion1,",
-						"          Region2 = AdminRegion2",
-						"     )) ~> STGCOVIDCases"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/datasets/RawDataCovidCases')]",
-				"[concat(variables('workspaceId'), '/datasets/Covid_data')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
 			"type": "Microsoft.Synapse/workspaces/credentials",
 			"apiVersion": "2019-06-01-preview",
@@ -463,12 +449,12 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SQL_CovidCases')]",
+			"name": "[concat(parameters('workspaceName'), '/Create_dimension_tables')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "\n/* Add a schema for all staging tables*/\nCREATE SCHEMA [staging]\n\n/* Create a staging table to keep cleaned file results*/\nCREATE TABLE [staging].[Covid_Data]\n(\n    id int NOT NULL\n    ,Date_updated datetime not NULL\n    ,CasesConfirmed int\n    ,ConfirmedChange INT\n    ,Deaths INT\n    ,DeathsChange INT \n\t,Recovered INT \n\t,RecoveredChange INT \n\t,Latitude [nvarchar](50) \n\t,Longitude [nvarchar](50) \n\t,ISO2 [nvarchar](5) \n\t,ISO3 [nvarchar](5) \n\t,Country [nvarchar](50) \n\t,Region1 [nvarchar](50) \n\t,Region2 [nvarchar](50) \n)\nWITH\n(\n    DISTRIBUTION = HASH (id),\n    CLUSTERED COLUMNSTORE INDEX\n)\nGO\n",
+					"query": "/* create schema for dimension tables */\n--CREATE SCHEMA [dim]\n\n/* create dim table */\nCREATE TABLE [dim].[Vaccine]\n(\n    vaccine_key INT IDENTITY(1,1) NOT NULL\n    , vaccine_name nvarchar(50) not NULL\n    , us_price FLOAT\n    , eu_price FLOAT\n    , doses_required INT\n    , days_apart INT\n)\nGO\n",
 					"metadata": {
 						"language": "sql"
 					},
@@ -481,18 +467,6 @@
 				"type": "SqlQuery"
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/ASA_DWH')]",
-			"type": "Microsoft.Synapse/workspaces/sqlPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"collation": "SQL_Latin1_General_CP1_CI_AS",
-				"maxSizeBytes": 263882790666240,
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "eastus2"
 		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/default')]",
