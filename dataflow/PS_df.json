@@ -111,7 +111,8 @@
 				"          pop2022,",
 				"          pop2021,",
 				"          {Alpha-3 code}",
-				"     )) ~> Destinations"
+				"     ),",
+				"     partitionBy('hash', 1)) ~> Destinations"
 			]
 		}
 	}
