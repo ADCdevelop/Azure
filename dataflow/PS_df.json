@@ -17,6 +17,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "PopByCountry"
+				},
+				{
+					"dataset": {
+						"referenceName": "country_codes",
+						"type": "DatasetReference"
+					},
+					"name": "countriescodes"
 				}
 			],
 			"sinks": [
@@ -37,6 +44,9 @@
 				},
 				{
 					"name": "select1"
+				},
+				{
+					"name": "join3"
 				}
 			],
 			"scriptLines": [
@@ -61,19 +71,34 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> PopByCountry",
+				"source(output(",
+				"          Country as string,",
+				"          {Alpha-2 code} as string,",
+				"          {Alpha-3 code} as string,",
+				"          {Numeric code} as string,",
+				"          {Latitude (average)} as string,",
+				"          {Longitude (average)} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> countriescodes",
 				"vaccinations aggregate(groupBy(location),",
 				"     total_vaccinations = max(total_vaccinations)) ~> aggregate1",
 				"aggregate1, PopByCountry join(location == name,",
 				"     joinType:'left',",
 				"     broadcast: 'auto')~> join2",
-				"join2 select(mapColumn(",
+				"join3 select(mapColumn(",
 				"          location,",
 				"          total_vaccinations,",
 				"          pop2022,",
-				"          pop2021",
+				"          pop2021,",
+				"          {Alpha-3 code}",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
+				"join2, countriescodes join(location == Country,",
+				"     joinType:'outer',",
+				"     broadcast: 'auto')~> join3",
 				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['psresults'],",
@@ -84,7 +109,8 @@
 				"          location,",
 				"          total_vaccinations,",
 				"          pop2022,",
-				"          pop2021",
+				"          pop2021,",
+				"          {Alpha-3 code}",
 				"     ),",
 				"     partitionBy('hash', 1)) ~> Destinations"
 			]

@@ -1,0 +1,48 @@
+{
+	"name": "country_codes",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "countries_codes_and_coordinates.csv",
+				"fileSystem": "rawdata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Country",
+				"type": "String"
+			},
+			{
+				"name": "Alpha-2 code",
+				"type": "String"
+			},
+			{
+				"name": "Alpha-3 code",
+				"type": "String"
+			},
+			{
+				"name": "Numeric code",
+				"type": "String"
+			},
+			{
+				"name": "Latitude (average)",
+				"type": "String"
+			},
+			{
+				"name": "Longitude (average)",
+				"type": "String"
+			}
+		]
+	}
+}
