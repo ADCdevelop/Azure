@@ -30,16 +30,13 @@
 			],
 			"transformations": [
 				{
-					"name": "SelectPopulationOnly"
-				},
-				{
-					"name": "SelectCountryandVax"
-				},
-				{
 					"name": "aggregate1"
 				},
 				{
-					"name": "join1"
+					"name": "join2"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -64,37 +61,32 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> PopByCountry",
-				"PopByCountry select(mapColumn(",
-				"          name,",
+				"vaccinations aggregate(groupBy(location),",
+				"     total_vaccinations = max(total_vaccinations)) ~> aggregate1",
+				"aggregate1, PopByCountry join(location == name,",
+				"     joinType:'left',",
+				"     broadcast: 'auto')~> join2",
+				"join2 select(mapColumn(",
+				"          location,",
+				"          total_vaccinations,",
 				"          pop2022,",
 				"          pop2021",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectPopulationOnly",
-				"vaccinations select(mapColumn(",
-				"          location,",
-				"          date,",
-				"          total_vaccinations",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectCountryandVax",
-				"SelectCountryandVax aggregate(groupBy(location),",
-				"     total_vaccinations = max(total_vaccinations)) ~> aggregate1",
-				"aggregate1, SelectPopulationOnly join(location == name,",
-				"     joinType:'outer',",
-				"     broadcast: 'auto')~> join1",
-				"join1 sink(allowSchemaDrift: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['psresults'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     mapColumn(",
 				"          location,",
 				"          total_vaccinations,",
-				"          name,",
 				"          pop2022,",
 				"          pop2021",
-				"     )) ~> Destinations"
+				"     ),",
+				"     partitionBy('hash', 1)) ~> Destinations"
 			]
 		}
 	}
