@@ -3,11 +3,67 @@
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
-			"sources": [],
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "select1"
+				}
+			],
 			"scriptLines": [
-				""
+				"source(output(",
+				"          ID as string,",
+				"          Updated as string,",
+				"          Confirmed as integer,",
+				"          ConfirmedChange as integer,",
+				"          Deaths as integer,",
+				"          DeathsChange as integer,",
+				"          Recovered as integer,",
+				"          RecoveredChange as integer,",
+				"          Latitude as string,",
+				"          Longitude as string,",
+				"          ISO2 as string,",
+				"          ISO3 as string,",
+				"          Country_Region as string,",
+				"          AdminRegion1 as string,",
+				"          AdminRegion2 as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 aggregate(groupBy(Updated,",
+				"          AdminRegion1,",
+				"          AdminRegion2,",
+				"          Country_Region),",
+				"     Confirmed = sum(Confirmed),",
+				"          ConfirmedChange = sum(ConfirmedChange),",
+				"          Deaths = sum(Deaths),",
+				"          DeathsChange = sum(DeathsChange),",
+				"          Recovered = sum(Recovered),",
+				"          RecoveredChange = sum(RecoveredChange)) ~> aggregate1",
+				"aggregate1 select(mapColumn(",
+				"          Country_Region,",
+				"          Updated,",
+				"          Confirmed,",
+				"          ConfirmedChange,",
+				"          Deaths,",
+				"          DeathsChange,",
+				"          Recovered,",
+				"          RecoveredChange",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
