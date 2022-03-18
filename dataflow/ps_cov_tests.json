@@ -27,11 +27,11 @@
 					"description": "aggregate so that we have data per contry each day"
 				},
 				{
-					"name": "select1",
+					"name": "Select",
 					"description": "Select only important values"
 				},
 				{
-					"name": "derivedColumn1",
+					"name": "MakeNullsZero",
 					"description": "All Null values become now 0"
 				}
 			],
@@ -66,7 +66,7 @@
 				"          DeathsChange = sum(DeathsChange),",
 				"          Recovered = sum(Recovered),",
 				"          RecoveredChange = sum(RecoveredChange)) ~> aggregatetoCountryLevel",
-				"derivedColumn1 select(mapColumn(",
+				"MakeNullsZero select(mapColumn(",
 				"          Country_Region,",
 				"          Updated,",
 				"          Confirmed,",
@@ -77,7 +77,7 @@
 				"          RecoveredChange",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
+				"     skipDuplicateMapOutputs: true) ~> Select",
 				"aggregatetoCountryLevel derive(Updated = iifNull(Updated,'0'),",
 				"          Country_Region = iifNull(Country_Region,'0') ,",
 				"          Confirmed = iifNull(Confirmed,0),",
@@ -85,8 +85,8 @@
 				"          Deaths = iifNull(Deaths,0),",
 				"          DeathsChange = iifNull(DeathsChange,0),",
 				"          Recovered = iifNull(Recovered,0),",
-				"          RecoveredChange = iifNull(RecoveredChange,0)) ~> derivedColumn1",
-				"select1 sink(allowSchemaDrift: true,",
+				"          RecoveredChange = iifNull(RecoveredChange,0)) ~> MakeNullsZero",
+				"Select sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['ps_cov_tests'],",
 				"     umask: 0022,",
