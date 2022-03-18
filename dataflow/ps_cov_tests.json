@@ -9,7 +9,7 @@
 						"referenceName": "Covid_tests_per_subregion",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "RawDataTest"
 				}
 			],
 			"sinks": [
@@ -23,13 +23,16 @@
 			],
 			"transformations": [
 				{
-					"name": "aggregate1"
+					"name": "aggregatetoCountryLevel",
+					"description": "aggregate so that we have data per contry each day"
 				},
 				{
-					"name": "select1"
+					"name": "select1",
+					"description": "Select only important values"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "derivedColumn1",
+					"description": "All Null values become now 0"
 				}
 			],
 			"scriptLines": [
@@ -52,8 +55,8 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 aggregate(groupBy(Updated,",
+				"     ignoreNoFilesFound: false) ~> RawDataTest",
+				"RawDataTest aggregate(groupBy(Updated,",
 				"          AdminRegion1,",
 				"          AdminRegion2,",
 				"          Country_Region),",
@@ -62,7 +65,7 @@
 				"          Deaths = sum(Deaths),",
 				"          DeathsChange = sum(DeathsChange),",
 				"          Recovered = sum(Recovered),",
-				"          RecoveredChange = sum(RecoveredChange)) ~> aggregate1",
+				"          RecoveredChange = sum(RecoveredChange)) ~> aggregatetoCountryLevel",
 				"derivedColumn1 select(mapColumn(",
 				"          Country_Region,",
 				"          Updated,",
@@ -75,7 +78,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"aggregate1 derive(Updated = iifNull(Updated,'0'),",
+				"aggregatetoCountryLevel derive(Updated = iifNull(Updated,'0'),",
 				"          Country_Region = iifNull(Country_Region,'0') ,",
 				"          Confirmed = iifNull(Confirmed,0),",
 				"          ConfirmedChange = iifNull(ConfirmedChange,0),",
