@@ -12,7 +12,11 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "aggregate1"
@@ -74,7 +78,11 @@
 				"          Deaths = iifNull(Deaths,0),",
 				"          DeathsChange = iifNull(DeathsChange,0),",
 				"          Recovered = iifNull(Recovered,0),",
-				"          RecoveredChange = iifNull(RecoveredChange,0)) ~> derivedColumn1"
+				"          RecoveredChange = iifNull(RecoveredChange,0)) ~> derivedColumn1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
