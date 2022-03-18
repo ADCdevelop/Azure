@@ -94,7 +94,6 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     header: (['Country','Date','Confirmed','Confirmed_changes','Deaths','DeathsChanges','Recovered','RecoveredChanges']),",
 				"     partitionBy('hash', 1)) ~> DestinationPSCovTest"
 			]
 		}
