@@ -1,0 +1,48 @@
+{
+	"name": "vax_per_week",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "vaccinations_per_week.csv",
+				"fileSystem": "vaccinations"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "location",
+				"type": "String"
+			},
+			{
+				"name": "date",
+				"type": "String"
+			},
+			{
+				"name": "vaccine",
+				"type": "String"
+			},
+			{
+				"name": "total_vaccinations",
+				"type": "String"
+			},
+			{
+				"name": "Total_vaccinations_previous_day",
+				"type": "String"
+			},
+			{
+				"name": "Daily_vaccinations",
+				"type": "String"
+			}
+		]
+	}
+}
