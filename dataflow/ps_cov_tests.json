@@ -79,7 +79,7 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> Select",
 				"aggregatetoCountryLevel derive(Updated = iifNull(Updated,'0'),",
-				"          Country_Region = iifNull(Country_Region,'0') ,",
+				"          Country_Region = iifNull(Country_Region,'0'),",
 				"          Confirmed = iifNull(Confirmed,0),",
 				"          ConfirmedChange = iifNull(ConfirmedChange,0),",
 				"          Deaths = iifNull(Deaths,0),",
@@ -94,6 +94,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     header: (['Country','Date','Confirmed','Confirmed_changes','Deaths','DeathsChanges','Recovered','RecoveredChanges']),",
 				"     partitionBy('hash', 1)) ~> DestinationPSCovTest"
 			]
 		}
