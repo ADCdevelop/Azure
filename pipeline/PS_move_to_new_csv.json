@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "PS_df",
+						"referenceName": "ps_cov_tests",
 						"type": "DataFlowReference"
 					},
 					"compute": {
