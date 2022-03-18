@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText2",
+	"name": "Covid_data_per_month",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorageLS",
