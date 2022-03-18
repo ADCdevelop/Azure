@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Covid_data_per_month",
+						"referenceName": "Covid_tests_per_subregion",
 						"type": "DatasetReference"
 					},
 					"name": "source1"

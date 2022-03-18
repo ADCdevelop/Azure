@@ -1,5 +1,5 @@
 {
-	"name": "Covid_data_per_month",
+	"name": "Covid_tests_per_subregion",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorageLS",
