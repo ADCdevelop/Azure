@@ -1,0 +1,44 @@
+{
+	"name": "copy_to_local_db",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "vaccine_type_details",
+				"fileSystem": "queryready"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "vaccine_name",
+				"type": "String"
+			},
+			{
+				"name": "us_price",
+				"type": "String"
+			},
+			{
+				"name": "eu_price",
+				"type": "String"
+			},
+			{
+				"name": "doses_required",
+				"type": "String"
+			},
+			{
+				"name": "days_apart",
+				"type": "String"
+			}
+		]
+	}
+}

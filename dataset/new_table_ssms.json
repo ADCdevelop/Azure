@@ -9,7 +9,7 @@
 		"type": "SqlServerTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "dbo",
+			"schema": "AzureAD\\PaulSavu_l1rgwxx",
 			"table": "CovidFinal"
 		}
 	}
