@@ -29,12 +29,73 @@
 					"sink": {
 						"type": "SqlServerSink",
 						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false,
-						"tableOption": "autoCreate"
+						"sqlWriterUseTableLock": false
 					},
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "vaccine_name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "vaccine_name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "us_price",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "us_price",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "eu_price",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "eu_price",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "doses_required",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "doses_required",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "days_apart",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "days_apart",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -51,7 +112,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "SqlServerTable2",
+						"referenceName": "new_table_ssms",
 						"type": "DatasetReference"
 					}
 				]
