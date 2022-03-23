@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "ps_cov_tests",
+						"referenceName": "Copy_to_local_db",
 						"type": "DataFlowReference"
 					},
 					"compute": {
@@ -24,6 +24,54 @@
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "Send Email Success",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Data_flow",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-86.eastus.logic.azure.com:443/workflows/e6b1f1398475445081885ef204b428ef/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=o9NwZudCze4x6UKAW7YuPvA277WGl-qYsImvO2wD8y8",
+					"method": "POST"
+				}
+			},
+			{
+				"name": "Send Email Error",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Data_flow",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-02.eastus.logic.azure.com:443/workflows/0f8a822c89dd4f27a183c8170100a8ce/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OMU5-Evd2xXVrRHiI1HGj6TcOKydBl_fcvB7-RXXlco",
+					"method": "POST"
 				}
 			}
 		],
