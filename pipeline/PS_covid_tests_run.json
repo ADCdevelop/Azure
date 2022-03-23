@@ -35,72 +35,11 @@
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "vaccine_name",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "vaccine_name",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "us_price",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "us_price",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "eu_price",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "eu_price",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "doses_required",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "doses_required",
-									"type": "String",
-									"physicalType": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "days_apart",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "days_apart",
-									"type": "String",
-									"physicalType": "String"
-								}
-							}
-						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
+							"treatBooleanAsNumber": false,
+							"dateTimeFormat": "mm-dd-yyyy"
 						}
 					}
 				},
@@ -112,7 +51,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "new_table_ssms",
+						"referenceName": "SqlServerTable2",
 						"type": "DatasetReference"
 					}
 				]
