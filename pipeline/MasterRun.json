@@ -7,7 +7,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Copy to BlobStorage FromGIT",
+						"activity": "Copy to DataLake From GIT",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -94,9 +94,87 @@
 					"sink": {
 						"type": "SqlServerSink",
 						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate"
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Country",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Country"
+								}
+							},
+							{
+								"source": {
+									"name": "ISO3",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ISO3"
+								}
+							},
+							{
+								"source": {
+									"name": "Date",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "Date"
+								}
+							},
+							{
+								"source": {
+									"name": "DailyConfirmedCases",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DailyConfirmedCases"
+								}
+							},
+							{
+								"source": {
+									"name": "DailyDeaths",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DailyDeaths"
+								}
+							},
+							{
+								"source": {
+									"name": "DailyRecovered",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DailyRecovered"
+								}
+							},
+							{
+								"source": {
+									"name": "DailyTests",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DailyTests"
+								}
+							},
+							{
+								"source": {
+									"name": "7DaysCumulatedTests",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "7DaysCumulatedTests"
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
@@ -106,13 +184,13 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "new_table_ssms",
+						"referenceName": "SqlServerTable2",
 						"type": "DatasetReference"
 					}
 				]
 			},
 			{
-				"name": "Copy to BlobStorage FromGIT",
+				"name": "Copy to DataLake From GIT",
 				"description": "Copy raw data files from Git Hub repository",
 				"type": "Copy",
 				"dependsOn": [],

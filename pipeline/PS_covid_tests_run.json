@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Copy to Local SSMS_copy1",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -29,7 +29,8 @@
 					"sink": {
 						"type": "SqlServerSink",
 						"writeBehavior": "insert",
-						"sqlWriterUseTableLock": false
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate"
 					},
 					"enableStaging": false,
 					"translator": {
@@ -37,82 +38,88 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "vaccine_name",
-									"type": "String",
-									"physicalType": "String"
+									"name": "Country",
+									"type": "String"
 								},
 								"sink": {
-									"name": "vaccine_name",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"name": "Country"
 								}
 							},
 							{
 								"source": {
-									"name": "us_price",
-									"type": "String",
-									"physicalType": "String"
+									"name": "ISO3",
+									"type": "String"
 								},
 								"sink": {
-									"name": "us_price",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"name": "ISO3"
 								}
 							},
 							{
 								"source": {
-									"name": "eu_price",
-									"type": "String",
-									"physicalType": "String"
+									"name": "Date",
+									"type": "DateTime"
 								},
 								"sink": {
-									"name": "eu_price",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"name": "Date"
 								}
 							},
 							{
 								"source": {
-									"name": "doses_required",
-									"type": "String",
-									"physicalType": "String"
+									"name": "DailyConfirmedCases",
+									"type": "Double"
 								},
 								"sink": {
-									"name": "doses_required",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"name": "DailyConfirmedCases"
 								}
 							},
 							{
 								"source": {
-									"name": "days_apart",
-									"type": "String",
-									"physicalType": "String"
+									"name": "DailyDeaths",
+									"type": "Double"
 								},
 								"sink": {
-									"name": "days_apart",
-									"type": "String",
-									"physicalType": "nvarchar"
+									"name": "DailyDeaths"
+								}
+							},
+							{
+								"source": {
+									"name": "DailyRecovered",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "DailyRecovered"
+								}
+							},
+							{
+								"source": {
+									"name": "DailyTests",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DailyTests"
+								}
+							},
+							{
+								"source": {
+									"name": "7DaysCumulatedTests",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "7DaysCumulatedTests"
 								}
 							}
-						],
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false,
-							"dateTimeFormat": "mm-dd-yyyy"
-						}
+						]
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "copy_to_local_db",
+						"referenceName": "DelimitedText2",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "new_table_ssms",
+						"referenceName": "SqlServerTable2",
 						"type": "DatasetReference"
 					}
 				]
