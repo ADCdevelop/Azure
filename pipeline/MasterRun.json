@@ -89,8 +89,20 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"sink": {
+						"type": "SqlServerSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate"
+					},
 					"enableStaging": false
-				}
+				},
+				"outputs": [
+					{
+						"referenceName": "new_table_ssms",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
