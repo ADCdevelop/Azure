@@ -70,7 +70,7 @@
 				}
 			},
 			{
-				"name": "Copy to local ssms",
+				"name": "Copy to Local SSMS",
 				"type": "Copy",
 				"dependsOn": [
 					{
