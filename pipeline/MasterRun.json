@@ -158,7 +158,7 @@
 							{
 								"source": {
 									"name": "DailyTests",
-									"type": "Int32"
+									"type": "String"
 								},
 								"sink": {
 									"name": "DailyTests"
