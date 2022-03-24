@@ -33,7 +33,7 @@
 					{
 						"activity": "Data_flow",
 						"dependencyConditions": [
-							"Succeeded"
+							"Failed"
 						]
 					}
 				],
