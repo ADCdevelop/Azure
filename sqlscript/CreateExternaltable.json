@@ -1,0 +1,17 @@
+{
+	"name": "CreateExternaltable",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDelimitedTextFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] \n\tWITH ( FORMAT_TYPE = DELIMITEDTEXT ,\n\t       FORMAT_OPTIONS (\n\t\t\t FIELD_TERMINATOR = ',',\n\t\t\t USE_TYPE_DEFAULT = FALSE\n\t\t\t))\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'rawdata_adcdlstorage_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [rawdata_adcdlstorage_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://rawdata@adcdlstorage.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE vaccine (\n\t[vaccine_name] nvarchar(4000),\n\t[us_price] nvarchar(4000),\n\t[eu_price] nvarchar(4000),\n\t[doses_required] nvarchar(4000),\n\t[days_apart] nvarchar(4000) \n\t)\n\tWITH (\n\tLOCATION = 'price_vaccines.csv',\n\tDATA_SOURCE = [rawdata_adcdlstorage_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseDelimitedTextFormat]\n\t)\nGO\n\n\nSELECT TOP 100 * FROM vaccine\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "ASA_DWH",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
