@@ -1,0 +1,53 @@
+{
+	"name": "Dim_Vaccine",
+	"properties": {
+		"description": "Load dimension",
+		"activities": [
+			{
+				"name": "SCD",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "scdT1Generic",
+						"type": "DataFlowReference",
+						"parameters": {
+							"dimname": "'dimprods'",
+							"keycol": "'ProductNumber'",
+							"SurrogateKey": "'ProductID'",
+							"tablename": "'DimProducts'"
+						},
+						"datasetParameters": {
+							"ExistingMembers": {
+								"tablename": "DimProducts"
+							},
+							"SetMaxKey": {
+								"tablename": "DimProducts"
+							},
+							"sink1": {
+								"tablename": "DimProducts"
+							},
+							"sink2": {
+								"tablename": "DimProducts"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": []
+	}
+}

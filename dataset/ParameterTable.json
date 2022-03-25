@@ -1,0 +1,25 @@
+{
+	"name": "ParameterTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tablename": {
+				"type": "string",
+				"defaultValue": "DimVaccines"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().tablename",
+				"type": "Expression"
+			}
+		}
+	}
+}
