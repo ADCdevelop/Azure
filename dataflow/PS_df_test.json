@@ -5,6 +5,10 @@
 		"typeProperties": {
 			"sources": [
 				{
+					"dataset": {
+						"referenceName": "CSV_pop_by_country_2021_2022",
+						"type": "DatasetReference"
+					},
 					"name": "vaccinations"
 				},
 				{
@@ -47,13 +51,17 @@
 			],
 			"scriptLines": [
 				"source(output(",
-				"          location as string,",
-				"          date as string,",
-				"          vaccine as string,",
-				"          total_vaccinations as string",
+				"          Rank as string,",
+				"          name as string,",
+				"          pop2022 as string,",
+				"          pop2021 as string,",
+				"          GrowthRate as string,",
+				"          area as string,",
+				"          Density as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false) ~> vaccinations",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> vaccinations",
 				"source(output(",
 				"          Rank as string,",
 				"          name as string,",
