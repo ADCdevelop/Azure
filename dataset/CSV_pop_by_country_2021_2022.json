@@ -1,5 +1,5 @@
 {
-	"name": "pop_by_country_2021_2022",
+	"name": "CSV_pop_by_country_2021_2022",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorageLS",

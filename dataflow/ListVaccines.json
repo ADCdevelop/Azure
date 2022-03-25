@@ -6,14 +6,14 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "country_vaccinations_type",
+						"referenceName": "CSV_CountryVaccinationsType",
 						"type": "DatasetReference"
 					},
 					"name": "VaccinationsCSV"
 				},
 				{
 					"dataset": {
-						"referenceName": "prices",
+						"referenceName": "CSV_VaccinePrices",
 						"type": "DatasetReference"
 					},
 					"name": "PricesVaccinationsCSV"
@@ -22,7 +22,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "Results",
+						"referenceName": "DIR_queryready",
 						"type": "DatasetReference"
 					},
 					"name": "VaccineDetails"

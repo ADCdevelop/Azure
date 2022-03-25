@@ -1,5 +1,5 @@
 {
-	"name": "new_table_ssms",
+	"name": "SQL_CovidFinal",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "SqlServer1",

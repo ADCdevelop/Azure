@@ -13,14 +13,14 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "pop_by_country_2021_2022",
+						"referenceName": "CSV_pop_by_country_2021_2022",
 						"type": "DatasetReference"
 					},
 					"name": "PopByCountry"
 				},
 				{
 					"dataset": {
-						"referenceName": "country_codes",
+						"referenceName": "CSV_CountryCodes",
 						"type": "DatasetReference"
 					},
 					"name": "countriescodes"

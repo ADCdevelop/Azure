@@ -1,5 +1,5 @@
 {
-	"name": "vax_per_week",
+	"name": "CSV_vacc_per_week",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorageLS",

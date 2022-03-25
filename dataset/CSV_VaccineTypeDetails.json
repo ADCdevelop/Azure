@@ -1,5 +1,5 @@
 {
-	"name": "copy_to_local_db",
+	"name": "CSV_VaccineTypeDetails",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorageLS",

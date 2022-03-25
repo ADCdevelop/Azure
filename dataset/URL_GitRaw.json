@@ -1,5 +1,5 @@
 {
-	"name": "GitRaw",
+	"name": "URL_GitRaw",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "GitHubURL",

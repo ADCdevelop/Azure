@@ -1,9 +1,9 @@
 {
-	"name": "PS_tests_only",
+	"name": "PS_test_email_notifier",
 	"properties": {
 		"activities": [
 			{
-				"name": "Data_flow",
+				"name": "Move to SQL table",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -31,7 +31,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Data_flow",
+						"activity": "Move to SQL table",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -59,7 +59,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Data_flow",
+						"activity": "Move to SQL table",
 						"dependencyConditions": [
 							"Failed"
 						]

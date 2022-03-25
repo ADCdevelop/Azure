@@ -251,7 +251,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "GitRaw",
+						"referenceName": "URL_GitRaw",
 						"type": "DatasetReference"
 					}
 				],
