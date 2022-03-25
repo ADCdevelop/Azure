@@ -1,12 +1,19 @@
 {
-	"name": "Dim_Vaccine",
+	"name": "AP_DimVaccine",
 	"properties": {
 		"description": "Load dimension",
 		"activities": [
 			{
-				"name": "SCD",
+				"name": "LoadSCD",
 				"type": "ExecuteDataFlow",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "VaccineTypes",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -17,26 +24,26 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "scdT1Generic",
+						"referenceName": "LoadSCD",
 						"type": "DataFlowReference",
 						"parameters": {
-							"dimname": "'dimprods'",
-							"keycol": "'ProductNumber'",
-							"SurrogateKey": "'ProductID'",
-							"tablename": "'DimProducts'"
+							"dimname": "'DimVaccines'",
+							"keycol": "'VaccineCode'",
+							"SurrogateKey": "'VaccineID'",
+							"tablename": "'DimVaccines'"
 						},
 						"datasetParameters": {
 							"ExistingMembers": {
-								"tablename": "DimProducts"
+								"tablename": "DimVaccines"
 							},
 							"SetMaxKey": {
-								"tablename": "DimProducts"
+								"tablename": "DimVaccines"
 							},
 							"sink1": {
-								"tablename": "DimProducts"
+								"tablename": "DimVaccines"
 							},
 							"sink2": {
-								"tablename": "DimProducts"
+								"tablename": "DimVaccines"
 							}
 						}
 					},
@@ -45,6 +52,19 @@
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
+				}
+			},
+			{
+				"name": "VaccineTypes",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "AP_Vaccine_Types",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
 				}
 			}
 		],
