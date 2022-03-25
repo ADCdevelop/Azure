@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Run data flow for vaccinations",
+				"name": "Clean file",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
@@ -34,11 +34,11 @@
 				}
 			},
 			{
-				"name": "Get Data For REPORTING",
+				"name": "Combine 2 CSVs",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
-						"activity": "Run data flow for vaccinations",
+						"activity": "Clean file",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -61,11 +61,11 @@
 				}
 			},
 			{
-				"name": "Copy to Local SSMS",
+				"name": "Copy Results to Local SSMS",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Get Data For REPORTING",
+						"activity": "Combine 2 CSVs",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -178,13 +178,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "DelimitedText2",
+						"referenceName": "CSV_CovidTrackingDataFinal",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "SqlServerTable2",
+						"referenceName": "SQL_CovidFinal",
 						"type": "DatasetReference"
 					}
 				]
@@ -273,7 +273,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Copy to Local SSMS",
+						"activity": "Copy Results to Local SSMS",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -301,7 +301,7 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "Copy to Local SSMS",
+						"activity": "Copy Results to Local SSMS",
 						"dependencyConditions": [
 							"Failed"
 						]
