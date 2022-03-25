@@ -1,5 +1,5 @@
 {
-	"name": "Covid_tests_per_subregion",
+	"name": "CSV_CovidTrackingSubregion",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorageLS",

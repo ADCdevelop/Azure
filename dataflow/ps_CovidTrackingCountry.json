@@ -1,24 +1,24 @@
 {
-	"name": "ps_cov_tests",
+	"name": "ps_CovidTrackingCountry",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Covid_tests_per_subregion",
+						"referenceName": "CSV_CovidTrackingSubregion",
 						"type": "DatasetReference"
 					},
-					"name": "RawDataTest"
+					"name": "RawData"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "psres",
+						"referenceName": "DIR_psresults",
 						"type": "DatasetReference"
 					},
-					"name": "DestinationPSCovTest"
+					"name": "DestinationPSCovTotalCountry"
 				}
 			],
 			"transformations": [
@@ -27,7 +27,7 @@
 					"description": "aggregate so that we have data per contry each day"
 				},
 				{
-					"name": "Select",
+					"name": "SelectAliasColumns",
 					"description": "Select only important values"
 				},
 				{
@@ -55,35 +55,26 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> RawDataTest",
-				"RawDataTest aggregate(groupBy(Country_Region,",
+				"     ignoreNoFilesFound: false) ~> RawData",
+				"RawData aggregate(groupBy(Country_Region,",
 				"          Updated),",
-				"     Confirmed = sum(Confirmed),",
-				"          ConfirmedChange = sum(ConfirmedChange),",
-				"          Deaths = sum(Deaths),",
+				"     ConfirmedChange = sum(ConfirmedChange),",
 				"          DeathsChange = sum(DeathsChange),",
-				"          Recovered = sum(Recovered),",
 				"          RecoveredChange = sum(RecoveredChange)) ~> aggregatetoCountryLevel",
 				"MakeNullsZero select(mapColumn(",
 				"          Country_Region,",
-				"          Updated,",
-				"          Confirmed,",
-				"          ConfirmedChange,",
-				"          Deaths,",
-				"          DeathsChange,",
-				"          Recovered,",
-				"          RecoveredChange",
+				"          DayDate = Updated,",
+				"          TotalConfirmedCases = ConfirmedChange,",
+				"          TotalDeaths = DeathsChange,",
+				"          TotalRecovered = RecoveredChange",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> Select",
+				"     skipDuplicateMapOutputs: true) ~> SelectAliasColumns",
 				"aggregatetoCountryLevel derive(Country_Region = iifNull(Country_Region,'0'),",
-				"          Confirmed = iifNull(Confirmed,0),",
 				"          ConfirmedChange = iifNull(ConfirmedChange,0),",
-				"          Deaths = iifNull(Deaths,0),",
 				"          DeathsChange = iifNull(DeathsChange,0),",
-				"          Recovered = iifNull(Recovered,0),",
 				"          RecoveredChange = iifNull(RecoveredChange,0)) ~> MakeNullsZero",
-				"Select sink(allowSchemaDrift: true,",
+				"SelectAliasColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['ps_cov_cntry'],",
 				"     umask: 0022,",
@@ -91,7 +82,7 @@
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> DestinationPSCovTest"
+				"     partitionBy('hash', 1)) ~> DestinationPSCovTotalCountry"
 			]
 		}
 	}

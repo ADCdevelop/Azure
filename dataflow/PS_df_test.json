@@ -1,5 +1,5 @@
 {
-	"name": "PS_df",
+	"name": "PS_df_test",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -29,7 +29,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "psres",
+						"referenceName": "DIR_psresults",
 						"type": "DatasetReference"
 					},
 					"name": "Destinations"

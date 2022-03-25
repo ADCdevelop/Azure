@@ -1,5 +1,5 @@
 {
-	"name": "source_dataset",
+	"name": "CSV_CovidTrackingDataFinal",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorageLS",

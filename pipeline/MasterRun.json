@@ -23,7 +23,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "ps_cov_tests",
+						"referenceName": "ps_CovidTrackingCountry",
 						"type": "DataFlowReference"
 					},
 					"compute": {

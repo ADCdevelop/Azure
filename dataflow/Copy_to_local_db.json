@@ -6,19 +6,19 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "source_dataset",
+						"referenceName": "CSV_CovidTrackingDataFinal",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "CSVsource"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "psres",
+						"referenceName": "DIR_psresults",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "CSVdestination"
 				}
 			],
 			"transformations": [],
@@ -36,15 +36,15 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     limit: 100,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 sink(allowSchemaDrift: true,",
+				"     ignoreNoFilesFound: false) ~> CSVsource",
+				"CSVsource sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     format: 'table') ~> sink1"
+				"     format: 'table') ~> CSVdestination"
 			]
 		}
 	}

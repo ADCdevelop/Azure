@@ -1,5 +1,5 @@
 {
-	"name": "psres",
+	"name": "DIR_psresults",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorageLS",
