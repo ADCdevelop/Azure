@@ -23,16 +23,15 @@
 			],
 			"transformations": [
 				{
-					"name": "aggregatetoCountryLevel",
-					"description": "aggregate so that we have data per contry each day"
-				},
-				{
 					"name": "SelectAliasColumns",
 					"description": "Select only important values"
 				},
 				{
 					"name": "MakeNullsZero",
 					"description": "All Null values become now 0"
+				},
+				{
+					"name": "Filterrows"
 				}
 			],
 			"scriptLines": [
@@ -56,11 +55,6 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> RawData",
-				"RawData aggregate(groupBy(Country_Region,",
-				"          Updated),",
-				"     ConfirmedChange = sum(ConfirmedChange),",
-				"          DeathsChange = sum(DeathsChange),",
-				"          RecoveredChange = sum(RecoveredChange)) ~> aggregatetoCountryLevel",
 				"MakeNullsZero select(mapColumn(",
 				"          Country_Region,",
 				"          DayDate = Updated,",
@@ -70,10 +64,11 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectAliasColumns",
-				"aggregatetoCountryLevel derive(Country_Region = iifNull(Country_Region,'0'),",
+				"Filterrows derive(Country_Region = iifNull(Country_Region,'0'),",
 				"          ConfirmedChange = iifNull(ConfirmedChange,0),",
 				"          DeathsChange = iifNull(DeathsChange,0),",
 				"          RecoveredChange = iifNull(RecoveredChange,0)) ~> MakeNullsZero",
+				"RawData filter(Country_Region != 'Worldwide') ~> Filterrows",
 				"SelectAliasColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['ps_cov_cntry'],",
